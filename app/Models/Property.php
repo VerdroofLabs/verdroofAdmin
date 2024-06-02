@@ -10,9 +10,11 @@ class Property extends Model
     use HasFactory;
 
     protected $casts = [
-        'images' => 'array',
-        'amenities' => 'array',
-        'rules' => 'array'
+        'other_images' => 'array',
+        'basic_amenities' => 'array',
+        'building_amenities' => 'array',
+        'house_rules' => 'array',
+        'safety_amenities' => 'array',
     ];
 
     public function user()

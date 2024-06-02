@@ -14,32 +14,32 @@ class PropertyController extends Controller
 {
     public function createProperty(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title'      => 'required|string|max:255',
-            'description'      => 'required|string',
-            'price'     => 'required',
-            'rate'  => 'required|string',
-            'location'      => 'required|string|max:255',
-            'images'      => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return AppHelper::sendError('Validation Error!', $validator->errors());
-        }
         $code = rand(10000, 99999);
         $time = date_create()->getTimestamp();
 
         $prop = new Property;
-        $prop->title = htmlentities($request->input('title'));
+        $prop->apartment_type = htmlentities($request->input('apartment_type'));
         $prop->description = htmlentities($request->input('description'));
-        $prop->price =  htmlentities($request->input('price'));
-        $prop->rate = htmlentities($request->input('rate'));
+        $prop->rent =  htmlentities($request->input('rent'));
+        $prop->unit_type = htmlentities($request->input('unit_type'));
+        $prop->unit_floor = htmlentities($request->input('unit_floor'));
+
+        $prop->unit_size = htmlentities($request->input('unit_size'));
+        $prop->no_of_bedrooms = htmlentities($request->input('no_of_bedrooms'));
+        $prop->no_of_bathrooms =  htmlentities($request->input('no_of_bathrooms'));
+        $prop->cover_image = htmlentities($request->input('cover_image'));
+        $prop->payment_schedule = htmlentities($request->input('payment_schedule'));
+
         $prop->location = htmlentities($request->input('location'));
-        $prop->images =  $request->images;
-        $prop->amenities = $request->amenities;
-        $prop->rules = $request->rules;
-        $prop->landmark = htmlentities($request->input('landmark'));
-        $prop->mins_away = htmlentities($request->input('mins_away'));
+        $prop->other_images =  $request->other_images;
+        $prop->basic_amenities = $request->basic_amenities;
+        $prop->house_rules = $request->house_rules;
+        $prop->safety_amenities =  $request->safety_amenities;
+        $prop->building_amenities = $request->building_amenities;
+
+        $prop->utility_deposit = htmlentities($request->input('utility_deposit'));
+        $prop->security_deposit = htmlentities($request->input('security_deposit'));
+
         $prop->user_id = Auth::user()->id;
         $prop->property_id = "prop_".$time.$code;
         $prop_success = $prop->save();
@@ -53,33 +53,32 @@ class PropertyController extends Controller
 
     public function updateProperty(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'title'      => 'required|string|max:255',
-            'description'      => 'required|string',
-            'price'     => 'required',
-            'rate'  => 'required|string',
-            'location'      => 'required|string|max:255',
-            'images'      => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return AppHelper::sendError('Validation Error!', $validator->errors());
-        }
         $code = rand(10000, 99999);
         $time = date_create()->getTimestamp();
 
         $prop = Property::find($id);
-        $prop->title = htmlentities($request->input('title'));
+        $prop->apartment_type = htmlentities($request->input('apartment_type'));
         $prop->description = htmlentities($request->input('description'));
-        $prop->price =  htmlentities($request->input('price'));
-        $prop->rate = htmlentities($request->input('rate'));
+        $prop->rent =  htmlentities($request->input('rent'));
+        $prop->unit_type = htmlentities($request->input('unit_type'));
+        $prop->unit_floor = htmlentities($request->input('unit_floor'));
+
+        $prop->unit_size = htmlentities($request->input('unit_size'));
+        $prop->no_of_bedrooms = htmlentities($request->input('no_of_bedrooms'));
+        $prop->no_of_bathrooms =  htmlentities($request->input('no_of_bathrooms'));
+        $prop->cover_image = htmlentities($request->input('cover_image'));
+        $prop->payment_schedule = htmlentities($request->input('payment_schedule'));
+
         $prop->location = htmlentities($request->input('location'));
-        $prop->images =  $request->images;
-        $prop->amenities = $request->amenities;
-        $prop->rules = $request->rules;
-        $prop->landmark = htmlentities($request->input('landmark'));
-        $prop->mins_away = htmlentities($request->input('mins_away'));
-        $prop->property_id = "prop_".$time.$code;
+        $prop->other_images =  $request->other_images;
+        $prop->basic_amenities = $request->basic_amenities;
+        $prop->house_rules = $request->house_rules;
+        $prop->safety_amenities =  $request->safety_amenities;
+        $prop->building_amenities = $request->building_amenities;
+
+        $prop->utility_deposit = htmlentities($request->input('utility_deposit'));
+        $prop->security_deposit = htmlentities($request->input('security_deposit'));
+
         $prop_success = $prop->save();
 
         if ($prop_success) {

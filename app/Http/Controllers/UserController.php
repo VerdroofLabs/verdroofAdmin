@@ -72,10 +72,10 @@ class UserController extends Controller
 
     public function loginUser(Request $request)
     {
-        $this->validate($request, [
-			'email'=>'required',
-			'password'=>'required',
-		]);
+        // $this->validate($request, [
+		// 	'email'=>'required',
+		// 	'password'=>'required',
+		// ]);
 
         // return $request;
 		// $credentials=$request->only('email','password');
@@ -110,20 +110,16 @@ class UserController extends Controller
 
     public function updateUserProfile(Request $request){
         $profile = Auth::user()->profile;
-        $profile->school = htmlentities($request->input('school'));
-        $profile->work = htmlentities($request->input('work'));
-        $profile->image_url = htmlentities($request->input('image_url'));
-        $profile->birthday = htmlentities($request->input('birthday'));
-        $profile->favorite_song = htmlentities($request->input('favorite_song'));
-        $profile->home = htmlentities($request->input('home'));
-        $profile->pet = htmlentities($request->input('pet'));
-        $profile->obsessed_with = htmlentities($request->input('obsessed_with'));
-
+        $profile->preferred_name = htmlentities($request->input('preferred_name'));
+        $profile->phone_number = htmlentities($request->input('phone_number'));
+        $profile->government_id = htmlentities($request->input('government_id'));
+        $profile->address = htmlentities($request->input('address'));
+        $profile->emergency_contact = htmlentities($request->input('emergency_contact'));
         $saved = $profile->save();
-
         if($saved){
             return AppHelper::sendResponse($profile, 'Profile Updated Successfully');
         }
+        return AppHelper::sendError('Profile Update failed', ['Profile Update, try again']);
 	}
 
     public function getUserProfile(Request $Request){
@@ -153,7 +149,7 @@ class UserController extends Controller
 	}
 
     public function verify_email_template($user, $code, $token){
-        $url = "https://verdroof-web-next.vercel.app/verify?token={$token}";
+        $url = "https://verdroof.com/verify?token={$token}&code={$code}";
         return "
         <!DOCTYPE html>
         <html lang='en'>

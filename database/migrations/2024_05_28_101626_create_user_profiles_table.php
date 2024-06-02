@@ -14,14 +14,11 @@ return new class extends Migration
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->string('school')->nullable();
-            $table->string('work')->nullable();
-            $table->string('image_url')->nullable();
-            $table->string('birthday')->nullable();
-            $table->string('favorite_song')->nullable();
-            $table->string('home')->nullable();
-            $table->string('pet')->nullable();
-            $table->string('obsessed_with')->nullable();
+            $table->string('preferred_name')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('government_id')->nullable();
+            $table->string('address')->nullable();
+            $table->string('emergency_contact')->nullable();
             $table->timestamps();
         });
     }
