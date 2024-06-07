@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\FavoriteController;
 
 
 /*
@@ -17,10 +18,10 @@ use App\Http\Controllers\PropertyController;
 |
 */
 
-Route::post('/auth/login', [UserController::class, 'loginUser'])->name('loginUser');
+Route::post('/auth/login', [UserController::class, 'loginUser'])->name('login');
 Route::post('/auth/create', [UserController::class, 'createUser'])->name('createUser');
 Route::post('/auth/verify/{token}', [UserController::class, 'verifyUser'])->name('verifyUser');
-
+Route::get('/properties/all', [PropertyController::class, 'getAllProperties'])->name('getAllProperties');
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
@@ -34,8 +35,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/property', [PropertyController::class, 'createProperty'])->name('createProperty');
     Route::get('/property/{id}', [PropertyController::class, 'getProperty'])->name('getProperty');
-    Route::get('/properties/all', [PropertyController::class, 'getAllProperty'])->name('getAllProperty');
+    Route::get('/user/properties/all', [PropertyController::class, 'getAllProperty'])->name('getAllUserproperty');
     Route::put('/property/{id}', [PropertyController::class, 'updateProperty'])->name('updateProperty');
+
+    Route::post('/bookmark', [FavoriteController::class, 'addItemToFavorites'])->name('addItemToFavorites');
+    Route::post('/bookmark/remove', [FavoriteController::class, 'deleteItemFromFavorites'])->name('deleteItemFromFavorites');
+    Route::get('/bookmarks', [FavoriteController::class, 'getUserFavorites'])->name('getUserFavorites');
 
 
     Route::post('/orders/paystack', [OrderController::class, 'paystackOrder'])->name('paystackOrder');

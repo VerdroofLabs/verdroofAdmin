@@ -99,15 +99,21 @@ class PropertyController extends Controller
         }
     }
 
-    public function getAllProperty(Request $request)
+    public function getAllUserProperty(Request $request)
     {
         $prop = Auth::user()->properties;
 
         if ($prop) {
-            return AppHelper::sendResponse($prop, 'Property Fetched Successfully');
+            return AppHelper::sendResponse($prop, 'Properties Fetched Successfully');
         }else{
             return AppHelper::sendError('Property not found', ['Property not found'], 400);
         }
+    }
+
+    public function getAllProperties(Request $request)
+    {
+        $prop = Property::all();
+        return AppHelper::sendResponse($prop, 'Properties Fetched Successfully');
     }
 
 }

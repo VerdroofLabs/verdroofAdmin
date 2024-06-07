@@ -9,6 +9,7 @@ use App\Helpers\AppHelper;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Models\Favorite;
 use App\Tobe\SAjax;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -41,6 +42,10 @@ class UserController extends Controller
         $user_success = $user->save();
         $profile->user_id = $user->id;
         $profile_success = $profile->save();
+
+        //create a new favorite when a user is created
+        $favorite = new Favorite;
+        $fav_success = $favorite->save();
 
         $token = $user->createToken('email_verification')->plainTextToken;
         $mail_count = 0;
@@ -95,7 +100,7 @@ class UserController extends Controller
             return AppHelper::sendError('Email not verified', ['Email not verified, verify email and try again']);
         }
 		// $request->flashExcept('password');
-        return AppHelper::sendError('Authentication failed', ['Login Failed, confirm details and try again']);
+        return AppHelper::sendError('Authentication failed', ['Login Failed, confirm details and try again'], 401);
     }
 
     public function logoutUser(Request $Request){
