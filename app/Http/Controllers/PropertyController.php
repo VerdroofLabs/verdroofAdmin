@@ -116,9 +116,9 @@ class PropertyController extends Controller
         return AppHelper::sendResponse($prop, 'Properties Fetched Successfully');
     }
 
-    public function searchProperty(Request $request)
+    public function searchProperty(Request $request, $search)
     {
-        $search = $request->input('query');
+        // $search = $request->input('query');
         $props =  Property::where('unit_type', 'like', "%$search%")->orWhere('rent', 'like', "%$search%")->orWhere('location', 'like', "%$search%")->get();
 
         return AppHelper::sendResponse($props, 'Properties Fetched Successfully');
