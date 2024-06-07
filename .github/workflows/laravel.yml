@@ -34,3 +34,13 @@ jobs:
             **/public*/**
             **/node_modules/**
             **/vendor/**
+      - name: clear cache
+        run: php artisan cache:clear
+      - name: clear config cache
+        run: php artisan config:clear
+      - name: clear route cache
+        run: php artisan route:clear
+      - name: cache config
+        run: php artisan config:cache
+      - name: cache route
+        run: php artisan route:cache
