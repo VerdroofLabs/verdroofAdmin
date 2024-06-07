@@ -22,6 +22,7 @@ Route::post('/auth/login', [UserController::class, 'loginUser'])->name('login');
 Route::post('/auth/create', [UserController::class, 'createUser'])->name('createUser');
 Route::post('/auth/verify/{token}', [UserController::class, 'verifyUser'])->name('verifyUser');
 Route::get('/properties/all', [PropertyController::class, 'getAllProperties'])->name('getAllProperties');
+Route::get('/property/{id}', [PropertyController::class, 'getProperty'])->name('getProperty');
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
@@ -34,7 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/profile', [UserController::class, 'getUserProfile'])->name('getUserProfile');
 
     Route::post('/property', [PropertyController::class, 'createProperty'])->name('createProperty');
-    Route::get('/property/{id}', [PropertyController::class, 'getProperty'])->name('getProperty');
     Route::get('/user/properties/all', [PropertyController::class, 'getAllUserProperty'])->name('getAllUserproperty');
     Route::put('/user/property/{id}', [PropertyController::class, 'updateProperty'])->name('updateProperty');
 
