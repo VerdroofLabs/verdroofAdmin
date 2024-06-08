@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/property', [PropertyController::class, 'createProperty'])->name('createProperty');
     Route::get('/user/properties/all', [PropertyController::class, 'getAllUserProperty'])->name('getAllUserproperty');
     Route::put('/user/property/{id}', [PropertyController::class, 'updateProperty'])->name('updateProperty');
+    Route::delete('property/delete/{id}', [PropertyController::class, 'deleteProperty'])->name('deleteProperty');
 
     Route::post('/bookmark', [FavoriteController::class, 'addItemToFavorites'])->name('addItemToFavorites');
     Route::post('/bookmark/remove', [FavoriteController::class, 'deleteItemFromFavorites'])->name('deleteItemFromFavorites');

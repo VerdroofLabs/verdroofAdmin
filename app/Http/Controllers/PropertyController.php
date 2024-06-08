@@ -23,6 +23,7 @@ class PropertyController extends Controller
         $prop->rent =  htmlentities($request->input('rent'));
         $prop->unit_type = htmlentities($request->input('unit_type'));
         $prop->unit_floor = htmlentities($request->input('unit_floor'));
+        $prop->current_link = htmlentities($request->input('current_link'));
 
         $prop->unit_size = htmlentities($request->input('unit_size'));
         $prop->no_of_bedrooms = htmlentities($request->input('no_of_bedrooms'));
@@ -62,6 +63,7 @@ class PropertyController extends Controller
         $prop->rent =  htmlentities($request->input('rent'));
         $prop->unit_type = htmlentities($request->input('unit_type'));
         $prop->unit_floor = htmlentities($request->input('unit_floor'));
+        $prop->current_link = htmlentities($request->input('current_link'));
 
         $prop->unit_size = htmlentities($request->input('unit_size'));
         $prop->no_of_bedrooms = htmlentities($request->input('no_of_bedrooms'));
@@ -85,6 +87,19 @@ class PropertyController extends Controller
             return AppHelper::sendResponse($prop, 'Property Updated Successfully');
         }else{
             return AppHelper::sendError('Property update failed', ['Property update failed'], 400);
+        }
+    }
+
+    public function deleteProperty(Request $request, $id)
+    {
+
+        $prop = Property::find($id);
+        $prop_success = $prop->delete();
+
+        if ($prop_success) {
+            return AppHelper::sendResponse($prop, 'Property Deleted Successfully');
+        }else{
+            return AppHelper::sendError('Property delete failed', ['Property delete failed'], 400);
         }
     }
 
