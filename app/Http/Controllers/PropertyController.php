@@ -92,14 +92,15 @@ class PropertyController extends Controller
 
     public function deleteProperty(Request $request, $id)
     {
+        $user = Auth::user();
+        $prop = Property::where('user_id', $user->id)->where('id', $id)->first();
 
-        $prop = Property::find($id);
         $prop_success = $prop->delete();
 
         if ($prop_success) {
             return AppHelper::sendResponse($prop, 'Property Deleted Successfully');
         }else{
-            return AppHelper::sendError('Property delete failed', ['Property delete failed'], 400);
+            return AppHelper::sendError('Property delete failed, ensure you are deleting your property', ['Property delete failed'], 400);
         }
     }
 
