@@ -128,13 +128,8 @@ class UserController extends Controller
 	}
 
     public function getUserProfile(Request $Request){
-        $user = Auth::user();
-
-    	// Revoke current user token
-        $user->tokens()->where('id', $user->currentAccessToken()->id)->delete();
-    	return [
-            'message' => 'Logout Successful',
-        ];
+        $profile = Auth::user()->profile;
+        return AppHelper::sendResponse($profile, 'Profile Fetched Successfully');
 	}
 
     public function VerifyUser(Request $request, $token){

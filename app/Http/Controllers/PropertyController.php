@@ -116,11 +116,37 @@ class PropertyController extends Controller
         return AppHelper::sendResponse($prop, 'Properties Fetched Successfully');
     }
 
-    public function searchProperty(Request $request, $search)
+    public function searchProperty(Request $request)
     {
-        // $search = $request->input('query');
-        $props =  Property::where('unit_type', 'like', "%$search%")->orWhere('rent', 'like', "%$search%")->orWhere('location', 'like', "%$search%")->get();
+        $rent = trim($request->input('rent'));
+        $type = trim($request->input('type'));
+        $location = trim($request->input('location'));
 
+        if(strlen($rent)  && strlen($type) && strlen($location)){
+            $props =  Property::where('unit_type', 'like', "%$type%")->orWhere('rent', 'like', "%$rent%")->orWhere('location', 'like', "%$location%")->get();
+            $yes = 'all';
+        }elseif(strlen($rent)  && strlen($type)){
+            $props =  Property::where('unit_type', 'like', "%$type%")->orWhere('rent', 'like', "%$rent%")->get();
+            $yes = 'rent&type';
+        }elseif(strlen($type)  && strlen($location)){
+            $props =  Property::where('unit_type', 'like', "%$type%")->orWhere('location', 'like', "%$location%")->get();
+            $yes = 'location&type';
+        }elseif(strlen($rent)  && strlen($location)){
+            $props =  Property::where('rent', 'like', "%$rent%")->orWhere('location', 'like', "%$location%")->get();
+            $yes = 'location&rent';
+        }elseif(strlen($rent)){
+            $props =  Property::where('rent', 'like', "%$rent%")->get();
+            $yes = 'rent';
+        }elseif(strlen($type)){
+            $props =  Property::where('unit_type', 'like', "%$type%")->get();
+            $yes = 'type';
+        }elseif(strlen($location)){
+            $props =  Property::where('location', 'like', "%$location%")->get();
+            $yes = 'location';
+        }else{
+            $props =  Property::all();
+            $yes = 'none';
+        }
         return AppHelper::sendResponse($props, 'Properties Fetched Successfully');
     }
 

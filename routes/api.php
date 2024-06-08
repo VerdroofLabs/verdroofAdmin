@@ -23,7 +23,7 @@ Route::post('/auth/create', [UserController::class, 'createUser'])->name('create
 Route::post('/auth/verify/{token}', [UserController::class, 'verifyUser'])->name('verifyUser');
 Route::get('/properties/all', [PropertyController::class, 'getAllProperties'])->name('getAllProperties');
 Route::get('/property/{id}', [PropertyController::class, 'getProperty'])->name('getProperty');
-Route::get('/properties/search/{query}', [PropertyController::class, 'searchProperty'])->name('searchProperty');
+Route::get('/properties/search', [PropertyController::class, 'searchProperty'])->name('searchProperty');
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
