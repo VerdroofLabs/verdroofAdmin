@@ -114,7 +114,8 @@ class UserController extends Controller
 	}
 
     public function updateUserProfile(Request $request){
-        $profile = Auth::user()->profile;
+        $user = Auth::user();
+        $profile = UserProfile::where('user_id', $user->id)->first();
         $profile->preferred_name = htmlentities($request->input('preferred_name'));
         $profile->phone_number = htmlentities($request->input('phone_number'));
         $profile->government_id = htmlentities($request->input('government_id'));
