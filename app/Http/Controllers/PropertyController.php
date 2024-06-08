@@ -77,6 +77,8 @@ class PropertyController extends Controller
         $prop->house_rules = $request->house_rules;
         $prop->safety_amenities =  $request->safety_amenities;
         $prop->building_amenities = $request->building_amenities;
+        $prop->published = htmlentities($request->input('published'));
+
 
         $prop->utility_deposit = htmlentities($request->input('utility_deposit'));
         $prop->security_deposit = htmlentities($request->input('security_deposit'));
