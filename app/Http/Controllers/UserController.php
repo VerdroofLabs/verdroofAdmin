@@ -45,6 +45,7 @@ class UserController extends Controller
 
         //create a new favorite when a user is created
         $favorite = new Favorite;
+        $favorite->user_id = $user->id;
         $fav_success = $favorite->save();
 
         $token = $user->createToken('email_verification')->plainTextToken;
