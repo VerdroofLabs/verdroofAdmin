@@ -41,7 +41,7 @@ class FavoriteController extends Controller
                 return AppHelper::sendError('Property Bookmark Failed', ['Property Bookmarked Failed, Try Again'], 400);
             }
         }else{
-            return AppHelper::sendResponse("Property $prop->property_id bookmarked already", 'Property Already Bookmarked');
+            return AppHelper::sendResponse("Property bookmarked already", 'Property Already Bookmarked');
         }
     }
 
