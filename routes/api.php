@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\FavoriteController;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AuthMail;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,11 +30,17 @@ Route::get('/properties/search', [PropertyController::class, 'searchProperty'])-
 //     return $request->user();
 // });
 
+Route::get('/send-test-email', function () {
+    Mail::to('sureboytobi@gmail.com')->send(new AuthMail());
+    return 'Test email sent!';
+});
+
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/auth/logout', [UserController::class, 'logoutUser'])->name('logoutUser');
     Route::post('/user/profile', [UserController::class, 'updateUserProfile'])->name('updateUserProfile');
     Route::get('/user/profile', [UserController::class, 'getUserProfile'])->name('getUserProfile');
+    Route::get('/upload/image', [UserController::class, 'uploadImage'])->name('uploadImage');
 
     Route::post('/property', [PropertyController::class, 'createProperty'])->name('createProperty');
     Route::get('/user/properties/all', [PropertyController::class, 'getAllUserProperty'])->name('getAllUserproperty');
@@ -43,7 +50,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/bookmark', [FavoriteController::class, 'addItemToFavorites'])->name('addItemToFavorites');
     Route::post('/bookmark/remove', [FavoriteController::class, 'deleteItemFromFavorites'])->name('deleteItemFromFavorites');
     Route::get('/bookmarks', [FavoriteController::class, 'getUserFavorites'])->name('getUserFavorites');
-
 
     Route::post('/orders/paystack', [OrderController::class, 'paystackOrder'])->name('paystackOrder');
     Route::post('/orders/flutterwave/initiate', [OrderController::class, 'flutterwaveInitiate'])->name('flutterwaveInitiate');
