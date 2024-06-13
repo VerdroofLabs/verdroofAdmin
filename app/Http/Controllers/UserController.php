@@ -163,7 +163,7 @@ class UserController extends Controller
     {
         // Validate the request
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,webp,png,jpg,gif|max:2048',
             'type'=>'required|string'
         ]);
 
@@ -174,7 +174,7 @@ class UserController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $path = public_path("../../public_html/verdroofAdmin/storage/$request->type"); // Adjust the path to point to public_html/uploads
+            $path = public_path("../../../public_html/verdroofAdmin/storage/$request->type"); // Adjust the path to point to public_html/uploads
 
             // Move the file to the public_html/uploads directory
             $file->move($path, $filename);
