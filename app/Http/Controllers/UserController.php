@@ -171,18 +171,19 @@ class UserController extends Controller
             return AppHelper::sendError('Validation Error!', $validator->errors());
         }
 
-        if ($request->file('image')) {
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $path = public_path("../../public_html/verdroofAdmin/storage/$request->type"); // Adjust the path to point to public_html/uploads
 
-            // Generate a unique filename with timestamp
-            $filename = time() . '_' . $file->getClientOriginalName();
+            // Move the file to the public_html/uploads directory
+            $file->move($path, $filename);
 
-            // Store the file with the new filename
-            $path = $file->storeAs("images/$request->type", $filename, 'public');
+            // Generate the URL for the uploaded file
+            $url = url("verdroofAdmin/storage/$request->type/$filename");
 
-            // Return the image URL
-            $imageUrl = asset('storage/' . $path);
-            return AppHelper::sendResponse($imageUrl, 'Image stored successfully');
+            // Return the URL in the response
+            return AppHelper::sendResponse($url, 'File stored successfully');
         }
     }
 

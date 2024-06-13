@@ -30,17 +30,18 @@ Route::get('/properties/search', [PropertyController::class, 'searchProperty'])-
 //     return $request->user();
 // });
 
-Route::get('/send-test-email', function () {
-    Mail::to('sureboytobi@gmail.com')->send(new AuthMail());
-    return 'Test email sent!';
-});
+// Route::get('/send-test-email', function () {
+//     Mail::to('sureboytobi@gmail.com')->send(new AuthMail());
+//     return 'Test email sent!';
+// });
+Route::post('/upload/image', [UserController::class, 'uploadImage'])->name('uploadImage');
 
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/auth/logout', [UserController::class, 'logoutUser'])->name('logoutUser');
     Route::post('/user/profile', [UserController::class, 'updateUserProfile'])->name('updateUserProfile');
     Route::get('/user/profile', [UserController::class, 'getUserProfile'])->name('getUserProfile');
-    Route::get('/upload/image', [UserController::class, 'uploadImage'])->name('uploadImage');
+
 
     Route::post('/property', [PropertyController::class, 'createProperty'])->name('createProperty');
     Route::get('/user/properties/all', [PropertyController::class, 'getAllUserProperty'])->name('getAllUserproperty');
