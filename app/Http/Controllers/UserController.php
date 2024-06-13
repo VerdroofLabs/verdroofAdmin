@@ -180,7 +180,7 @@ class UserController extends Controller
             $file->move($path, $filename);
 
             // Generate the URL for the uploaded file
-            $url = url("verdroofAdmin/storage/$request->type/$filename");
+            $url = url("storage/$request->type/$filename");
 
             // Return the URL in the response
             return AppHelper::sendResponse($url, 'File stored successfully');
