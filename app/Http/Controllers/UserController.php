@@ -12,9 +12,14 @@ use App\Models\UserProfile;
 use App\Models\Favorite;
 use App\Tobe\SAjax;
 use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Sanctum\PersonalResetToken;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AuthMail;
+use App\Mail\ResetPasswordMail;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 
 
@@ -60,7 +65,7 @@ class UserController extends Controller
             "user" => "$user->first_name $user->last_name",
             "code"=>  $code,
             "url"=>  "https://verdroof.com/verify?token={$token}&code={$code}",
-            "subject"=>"Verify Your Account"
+            "subject"=>"Email Verification"
         ];
 
         $mail_count++;
@@ -81,19 +86,16 @@ class UserController extends Controller
 
     public function loginUser(Request $request)
     {
-        // $this->validate($request, [
-		// 	'email'=>'required',
-		// 	'password'=>'required',
-		// ]);
-
-        // return $request;
-		// $credentials=$request->only('email','password');
 		if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'verified' => 1])){
 			// $request->session()->regenerate();
             $user = Auth::user();
+            $tokens = PersonalAccessToken::where('tokenable_id', $user->id)->get();
+            foreach($tokens as $token){
+                $token->delete();
+            }
             $response = [
-                'token' => $user->createToken('MyApp')->plainTextToken,
-                'user' => $user->select('first_name', 'last_name', 'email')->first()
+                'token' => $user->createToken('auth_token')->plainTextToken,
+                'user' => User::where('email', $request->email)->select('first_name', 'last_name', 'email')->first()
             ];
             return AppHelper::sendResponse($response, 'Login Successful');
 		}
@@ -153,12 +155,6 @@ class UserController extends Controller
         }
 	}
 
-    public function verify_email_template($user, $code, $token){
-        $url = "https://verdroof.com/verify?token={$token}&code={$code}";
-        return "
-        ";
-    }
-
     public function uploadImage(Request $request)
     {
         // Validate the request
@@ -186,6 +182,108 @@ class UserController extends Controller
             return AppHelper::sendResponse($url, 'File stored successfully');
         }
     }
+
+    public function deleteImage(Request $request)
+    {
+        // Validate the request, ensure you have some validation rules if needed
+        $validator = Validator::make($request->all(), [
+            'filename' => 'required|string', // Assuming you pass the filename or URL to delete
+            'type' => 'required|string', // Assuming you also pass the type or folder name
+        ]);
+
+        if ($validator->fails()) {
+            return AppHelper::sendError('Validation Error!', $validator->errors());
+        }
+
+        // Construct the full path to the image file
+        $filename = basename($request->filename); // Extract the filename from the full path or URL
+        $path = public_path("../../../public_html/verdroofAdmin/storage/{$request->type}/{$filename}");
+
+        // Check if the file exists before attempting to delete it
+        if (File::exists($path)) {
+            // Delete the file
+            File::delete($path);
+
+            // Optionally, you may want to delete the empty directory if no more files are present
+            $directory = public_path("../../../public_html/verdroofAdmin/storage/{$request->type}");
+            if (File::isDirectory($directory) && count(File::allFiles($directory)) === 0) {
+                File::deleteDirectory($directory);
+            }
+
+            return AppHelper::sendResponse(null, 'File deleted successfully');
+        } else {
+            return AppHelper::sendError('File not found', 'The specified file does not exist');
+        }
+    }
+
+    public function forgotPassword(Request $request){
+        $request->validate(['email' => 'required|email']);
+        $user = User::where('email', $request->email)->first();
+
+        if(!$user){
+            return AppHelper::sendError('User with email not found', ['User with email not found'], 400);
+        }
+
+        $token = Password::createToken($user);
+        $main_token = DB::table('password_reset_tokens')->where('email', $request->email)->first()->token;
+        $mail_data = [
+            "url"=>  "https://verdroof.com/reset-password?token={$main_token}",
+            "subject"=>"Password Reset"
+        ];
+
+        Mail::to($request->email)->send(new ResetPasswordMail($mail_data));
+
+        return AppHelper::sendResponse(null, 'Reset Mail Sent Successfully');
+	}
+
+    public function resetPassword(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'token' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return AppHelper::sendError('Validation Error!', $validator->errors());
+        }
+
+        $tokenInfo = DB::table('password_reset_tokens')
+                        ->where('email', $request->email)
+                        ->where('token', $request->token)
+                        ->first();
+
+        if (!$tokenInfo) {
+            return AppHelper::sendError('Invalid token or email', ['Invalid token or email'], 400);
+        }
+
+
+        // Ensure token is still valid (check created_at timestamp if needed)
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return AppHelper::sendError('User not found', ['User not found'], 400);
+        }
+
+
+        $createdAt = Carbon::parse($tokenInfo->created_at);
+        $expiry = now()->subMinutes(config('auth.passwords.users.expire', 60));
+
+        if ($createdAt->lt($expiry)) {
+            return AppHelper::sendError('Token has expired', ['Token has expired'], 400);
+        }
+
+
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        // Optionally delete the used token from the password_reset_tokens table
+        DB::table('password_reset_tokens')
+            ->where('email', $request->email)
+            ->where('token', $request->token)
+            ->delete();
+
+        return response()->json(['message' => 'Password reset successfully'], 200);
+	}
 
 
     /**

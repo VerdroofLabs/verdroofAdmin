@@ -21,6 +21,8 @@ use App\Mail\AuthMail;
 
 Route::post('/auth/login', [UserController::class, 'loginUser'])->name('login');
 Route::post('/auth/create', [UserController::class, 'createUser'])->name('createUser');
+Route::post('/auth/forgot-password', [UserController::class, 'forgotPassword'])->name('forgotPassword');
+Route::post('/auth/reset-password', [UserController::class, 'resetPassword'])->name('resetPassword');
 Route::post('/auth/verify/{token}', [UserController::class, 'verifyUser'])->name('verifyUser');
 Route::get('/properties/all', [PropertyController::class, 'getAllProperties'])->name('getAllProperties');
 Route::get('/property/{id}', [PropertyController::class, 'getProperty'])->name('getProperty');
@@ -35,6 +37,7 @@ Route::get('/properties/search', [PropertyController::class, 'searchProperty'])-
 //     return 'Test email sent!';
 // });
 Route::post('/upload/image', [UserController::class, 'uploadImage'])->name('uploadImage');
+Route::post('/upload/delete', [UserController::class, 'deleteImage'])->name('deleteImage');
 
 Route::middleware('auth:sanctum')->group(function () {
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>Verify Your Account</title>
+    <title>Reset Password</title>
 </head>
 <body
     style='
@@ -17,25 +17,19 @@
     <table align='center' border='0' cellpadding='0' cellspacing='0' width='600'>
         <tr>
             <td align='center' bgcolor='#008000' style='padding: 20px 0'>
-                <h1 style='color: #ffffff; margin: 0'>Verify Your Account</h1>
+                <h1 style='color: #ffffff; margin: 0'>Reset Password</h1>
             </td>
         </tr>
         <tr>
             <td bgcolor='#ffffff' style='padding: 40px 30px'>
-                <p style='margin: 0'>Dear {{ $data['user'] }},</p>
+                <p style='margin: 0'>Dear Verdroof User,</p>
                 <p style='margin: 20px 0'>
-                    Thank you for choosing Verdroof!
+                    You are receiving this email because we received a password reset request for your account.
                 </p>
                 <p style='margin: 20px 0'>
-                    You are almost there.
+                    Please click the link below to reset your password.
                 </p>
-                <p style='margin: 20px 0'>
-                    Please click the link below to verify your account.
-                </p>
-                {{-- <h1 style=' margin:20px 0; font-size:17px'>
-                        Verification Code:
-                        <span style='color:#008000'>{{ $data['code'] }}</span>
-                    </h1> --}}
+
                 <p style='margin: 20px 0'>
                     <a href='{{ $data['url'] }}'
                         style='
@@ -48,16 +42,21 @@
                         Verify Account
                     </a>
                 </p>
-                <p style='margin: 20px 0'>
-                    If the button did not work, copy the link: {{ $data['url'] }} to your browser.
-                </p>
+
+                <p style='margin: 20px 0'>This password reset link will expire in 60 minutes.</p>
 
                 <p style='margin: 20px 0'>
-                    If you did not request to sign up for a Verdroof account, please ignore this email.
+                    If you did not request a password reset, no further action is required..
                 </p>
                 <p style='margin: 20px 0'>
                     Regards, <br />
                     The Verdroof Team
+                </p>
+
+                <hr>
+
+                <p style='margin: 20px 0'>
+                    If the button did not work, copy the link: {{ $data['url'] }} to your browser.
                 </p>
             </td>
         </tr>
