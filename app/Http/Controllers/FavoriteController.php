@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Favorite;
 use App\Models\FavoriteItem;
+use App\Models\Property;
 use App\Helpers\AppHelper;
 use Illuminate\Support\Facades\Validator;
 

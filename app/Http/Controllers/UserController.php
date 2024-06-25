@@ -259,14 +259,14 @@ class UserController extends Controller
         }
 
 
-        // Ensure token is still valid (check created_at timestamp if needed)
+        // Ensure user record still exists
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
             return AppHelper::sendError('User not found', ['User not found'], 400);
         }
 
-
+        // Ensure token is still valid (check created_at timestamp if needed)
         $createdAt = Carbon::parse($tokenInfo->created_at);
         $expiry = now()->subMinutes(config('auth.passwords.users.expire', 60));
 
@@ -284,7 +284,7 @@ class UserController extends Controller
             ->where('token', $request->token)
             ->delete();
 
-        return response()->json(['message' => 'Password reset successfully'], 200);
+        return AppHelper::sendResponse(null, 'Password reset successfully');
 	}
 
 
